@@ -1,4 +1,4 @@
-package com.projetoSquad6.ApiReceitas.config;
+package com.projetoSquad6.ApiReceitas.controller;
 
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
