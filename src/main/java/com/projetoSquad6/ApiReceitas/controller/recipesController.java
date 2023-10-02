@@ -28,12 +28,12 @@ public class recipesController {
     }
 
     @GetMapping(path = "/findByName")
-    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") String nome){
+    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") List<String> nomes){
         return null;
     }
 
-    @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
+    @GetMapping(path = "/findByIRestriction")
+    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") List<String> nomes){
         return null;
     }
 
