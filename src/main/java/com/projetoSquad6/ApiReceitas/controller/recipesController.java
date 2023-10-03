@@ -34,8 +34,9 @@ public class recipesController {
     }
 
     @GetMapping(path = "/findByName")
-    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") String nome){
-        return null;
+    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("name") List<String> name){
+        List<RecipesModel> recipesModels = recipesService.findByName(name);
+        return ResponseEntity.ok(recipesModels);
     }
 
     @GetMapping(path = "/findByRestriction")

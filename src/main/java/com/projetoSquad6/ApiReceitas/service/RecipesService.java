@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipesService {
     @Autowired
     RecipesRepository recipesRepository;
+
 
     public List<RecipesDto> findAll(){
         List<RecipesModel> recipesModel = recipesRepository.findAll();
@@ -22,9 +24,11 @@ public class RecipesService {
         return recipesRepository.save(recipesModel);
     }
 
-    public RecipesDto findByName(String name){
-        recipesRepository.findByName(name);
-        return null;
+    public List<RecipesModel> findByName(List<String> name){
+        List<String> ignoreCaseName = name.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+        return recipesRepository.findByName(ignoreCaseName);
     }
 
     public void deleteByName(String name){

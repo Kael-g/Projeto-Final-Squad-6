@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "tb_recipes")
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Getter
 @Setter
 public class RecipesModel {
