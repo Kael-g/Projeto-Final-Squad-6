@@ -1,5 +1,6 @@
 package com.projetoSquad6.ApiReceitas.service;
 
+import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 import com.projetoSquad6.ApiReceitas.repository.RecipesRepository;
@@ -13,13 +14,17 @@ public class RecipesService {
     @Autowired
     RecipesRepository recipesRepository;
 
+    @Autowired
+    RecipesMapper recipesMapper;
+
     public List<RecipesDto> findAll(){
         List<RecipesModel> recipesModel = recipesRepository.findAll();
         return null;
     }
 
-    public RecipesModel createRecipe(RecipesModel recipesModel){
-        return recipesRepository.save(recipesModel);
+    public RecipesDto createRecipe(RecipesModel recipesModel){
+        recipesRepository.save(recipesModel);
+        return recipesMapper.toRecipesDto(recipesModel);
     }
 
     public RecipesDto findByName(String name){

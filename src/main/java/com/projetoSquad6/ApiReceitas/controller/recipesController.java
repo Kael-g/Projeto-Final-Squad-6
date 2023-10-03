@@ -18,8 +18,8 @@ public class recipesController {
     RecipesService recipesService;
 
     @PostMapping
-    public ResponseEntity<RecipesModel> recipieDatabase(@RequestBody RecipesModel recipesModel) {
-        RecipesModel newRecipe = recipesService.createRecipe(recipesModel);
+    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+        RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
