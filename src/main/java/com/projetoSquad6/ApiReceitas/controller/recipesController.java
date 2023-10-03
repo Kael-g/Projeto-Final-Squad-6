@@ -2,6 +2,9 @@ package com.projetoSquad6.ApiReceitas.controller;
 
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
+import com.projetoSquad6.ApiReceitas.service.RecipesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +14,13 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/recipes")
 public class recipesController {
+    @Autowired
+    RecipesService recipesService;
 
     @PostMapping
-    public ResponseEntity<RecipesModel> recipieDatabase(@RequestBody RecipesDto recipesDto) {
-        return null;
+    public ResponseEntity<RecipesModel> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+        RecipesModel newRecipe = recipesService.createRecipe(recipesModel);
+        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -32,7 +38,7 @@ public class recipesController {
         return null;
     }
 
-    @GetMapping(path = "/findByIngredient")
+    @GetMapping(path = "/findByRestriction")
     public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
         return null;
     }

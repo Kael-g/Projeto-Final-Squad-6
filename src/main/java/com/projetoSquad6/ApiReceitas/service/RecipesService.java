@@ -18,9 +18,8 @@ public class RecipesService {
         return null;
     }
 
-    public boolean createRecipe(RecipesModel recipesModel){
-        recipesRepository.save(recipesModel);
-        return true;
+    public RecipesModel createRecipe(RecipesModel recipesModel){
+        return recipesRepository.save(recipesModel);
     }
 
     public RecipesDto findByName(String name){
