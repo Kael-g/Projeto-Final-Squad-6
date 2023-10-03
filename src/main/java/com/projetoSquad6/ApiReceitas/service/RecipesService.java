@@ -1,5 +1,6 @@
 package com.projetoSquad6.ApiReceitas.service;
 
+import com.projetoSquad6.ApiReceitas.exceptions.handleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
@@ -23,6 +24,11 @@ public class RecipesService {
     }
 
     public RecipesDto createRecipe(RecipesModel recipesModel){
+
+        if (recipesRepository.findByName(recipesModel.getName()).isPresent() ) {
+            throw new handleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
+        }
+
         recipesRepository.save(recipesModel);
         return recipesMapper.toRecipesDto(recipesModel);
     }
