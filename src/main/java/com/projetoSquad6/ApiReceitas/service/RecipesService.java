@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class RecipesService {
@@ -25,13 +26,13 @@ public class RecipesService {
 
     public RecipesDto createRecipe(RecipesModel recipesModel){
 
-        if (recipesRepository.findByName(recipesModel.getName()).isPresent() ) {
+        if (recipesRepository.findByNameValidation(recipesModel.getName().toLowerCase()).isPresent()) {
             throw new handleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
         }
-
         recipesRepository.save(recipesModel);
         return recipesMapper.toRecipesDto(recipesModel);
     }
+
 
     public RecipesDto findByName(String name){
         recipesRepository.findByName(name);
