@@ -13,8 +13,11 @@ import java.util.Objects;
 public class recipesController {
 
     @PostMapping
-    public ResponseEntity<RecipesModel> recipieDatabase(@RequestBody RecipesDto recipesDto) {
-        return null;
+    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+
+        RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
+
+        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
     @GetMapping
