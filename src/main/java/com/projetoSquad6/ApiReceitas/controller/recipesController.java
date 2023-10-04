@@ -21,19 +21,19 @@ public class recipesController {
     public ResponseEntity<List<RecipesModel>> displayAllRecipes() {
         return null;
     }
-
-    @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByIngredients(@RequestParam("nome") String nome){
-        return null;
-    }
-
+  
     @GetMapping(path = "/findByName")
     public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") String nome){
         return null;
     }
 
     @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
+    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") List<String> nomes){
+        return null;
+    }
+
+    @GetMapping(path = "/findByIRestriction")
+    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") List<String> nomes){
         return null;
     }
 
