@@ -19,7 +19,9 @@ public class RecipesController {
 
     @PostMapping
     public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+
         RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
+
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
