@@ -13,13 +13,13 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/recipes")
-public class recipesController {
+public class RecipesController {
     @Autowired
     RecipesService recipesService;
 
     @PostMapping
-    public ResponseEntity<RecipesModel> recipieDatabase(@RequestBody RecipesModel recipesModel) {
-        RecipesModel newRecipe = recipesService.createRecipe(recipesModel);
+    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+        RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
@@ -34,9 +34,9 @@ public class recipesController {
     }
 
     @GetMapping(path = "/findByName")
-    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("name") List<String> name){
-        List<RecipesModel> recipesModels = recipesService.findByName(name);
-        return ResponseEntity.ok(recipesModels);
+    public ResponseEntity<List<RecipesDto>>searchByNameRecipies(@RequestParam("name") List<String> name){
+        List<RecipesDto> recipes = recipesService.findByName(name);
+        return ResponseEntity.ok(recipes);
     }
 
     @GetMapping(path = "/findByRestriction")
