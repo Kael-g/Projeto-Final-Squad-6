@@ -2,9 +2,6 @@ package com.projetoSquad6.ApiReceitas.controller;
 
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
-import com.projetoSquad6.ApiReceitas.service.RecipesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +10,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/recipes")
-public class RecipesController {
-    @Autowired
-    RecipesService recipesService;
+public class recipesController {
 
     @PostMapping
     public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
@@ -29,19 +24,19 @@ public class RecipesController {
     public ResponseEntity<List<RecipesModel>> displayAllRecipes() {
         return null;
     }
-
-    @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByIngredients(@RequestParam("nome") String nome){
-        return null;
-    }
-
+  
     @GetMapping(path = "/findByName")
     public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") String nome){
         return null;
     }
 
-    @GetMapping(path = "/findByRestriction")
-    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
+    @GetMapping(path = "/findByIngredient")
+    public ResponseEntity<List<RecipesModel>>searchByNameRecipies(@RequestParam("nome") List<String> nomes){
+        return null;
+    }
+
+    @GetMapping(path = "/findByIRestriction")
+    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") List<String> nomes){
         return null;
     }
 
