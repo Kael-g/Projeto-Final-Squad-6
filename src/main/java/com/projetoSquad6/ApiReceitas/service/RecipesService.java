@@ -1,6 +1,6 @@
 package com.projetoSquad6.ApiReceitas.service;
 
-import com.projetoSquad6.ApiReceitas.exceptions.handleRecipeExistsByName;
+import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class RecipesService {
@@ -27,7 +26,7 @@ public class RecipesService {
     public RecipesDto createRecipe(RecipesModel recipesModel){
 
         if (recipesRepository.findByNameValidation(recipesModel.getName().toLowerCase()).isPresent()) {
-            throw new handleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
+            throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
         }
         recipesRepository.save(recipesModel);
         return recipesMapper.toRecipesDto(recipesModel);

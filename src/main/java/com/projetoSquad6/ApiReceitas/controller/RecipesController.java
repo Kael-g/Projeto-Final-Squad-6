@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/recipes")
-public class recipesController {
+public class RecipesController {
     @Autowired
     RecipesService recipesService;
 
