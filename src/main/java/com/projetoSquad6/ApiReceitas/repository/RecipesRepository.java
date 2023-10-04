@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface RecipesRepository extends JpaRepository<RecipesModel, Long> {
+
     @Query("SELECT r FROM RecipesModel r WHERE r.name = :nameValidation")
     Optional<RecipesModel> findByNameValidation(@Param("nameValidation") String nameValidation);
 

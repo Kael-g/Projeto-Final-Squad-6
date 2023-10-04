@@ -2,6 +2,7 @@ package com.projetoSquad6.ApiReceitas.controller;
 
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
+
 import com.projetoSquad6.ApiReceitas.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class RecipesController {
     @PostMapping
     public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
         RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
+
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
@@ -54,7 +56,5 @@ public class RecipesController {
                                                      @RequestBody RecipesDto recipesDto){
         return null;
     }
-
-
 
 }

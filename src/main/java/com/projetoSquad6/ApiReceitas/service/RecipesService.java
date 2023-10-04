@@ -29,13 +29,13 @@ public class RecipesService {
 
     public RecipesDto createRecipe(RecipesModel recipesModel){
 
-        if (recipesRepository.findByNameValidation(recipesModel.getName().toLowerCase()).isPresent() ) {
+        if (recipesRepository.findByNameValidation(recipesModel.getName().toLowerCase()).isPresent()) {
             throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
         }
-
         recipesRepository.save(recipesModel);
         return recipesMapper.toRecipesDto(recipesModel);
     }
+
 
     public List<RecipesDto> findByName(List<String> name){
         List<String> ignoreCaseName = name.stream()
