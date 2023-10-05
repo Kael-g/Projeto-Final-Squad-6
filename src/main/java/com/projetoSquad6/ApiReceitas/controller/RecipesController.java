@@ -26,8 +26,8 @@ public class RecipesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecipesModel>> displayAllRecipes() {
-        return null;
+    public ResponseEntity<List<RecipesDto>> displayAllRecipes() {
+        return ResponseEntity.ok(recipesService.findAll());
     }
 
     @GetMapping(path = "/findByIngredient")
@@ -47,14 +47,16 @@ public class RecipesController {
     }
 
     @DeleteMapping(path = "/deleteByName")
-    public ResponseEntity<Objects>deleteByName(@RequestParam("name") String name){
-        return null;
+    public ResponseEntity deleteByName(@RequestParam("name") String name){
+       recipesService.deleteByName(name);
+       return ResponseEntity.ok("Deletado com sucesso");
     }
 
+
     @PutMapping(path = "/updateByName")
-    public ResponseEntity<RecipesModel>updateRecipies(@RequestParam("name") String name ,
+    public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
                                                      @RequestBody RecipesDto recipesDto){
-        return null;
+        return ResponseEntity.ok(recipesService.updateRecipe(name, recipesDto));
     }
 
 }

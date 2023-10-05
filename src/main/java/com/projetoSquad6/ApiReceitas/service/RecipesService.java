@@ -9,7 +9,9 @@ import com.projetoSquad6.ApiReceitas.repository.RecipesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,8 +25,13 @@ public class RecipesService {
 
 
     public List<RecipesDto> findAll(){
-        List<RecipesModel> recipesModel = recipesRepository.findAll();
-        return null;
+        List<RecipesModel> recipes = recipesRepository.findAll();
+        List<RecipesDto> recipesDtos = new ArrayList<>();
+
+        for(RecipesModel recipesModel: recipes) {
+            recipesDtos.add(recipesMapper.toRecipesDto(recipesModel));
+        }
+        return recipesDtos;
     }
 
     public RecipesDto createRecipe(RecipesModel recipesModel){
@@ -52,6 +59,37 @@ public class RecipesService {
     }
 
     public void deleteByName(String name){
+        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameValidation(name);
+        if (recipesModelOptional.isEmpty()) {
+            throw new HandleRecipeNoExistsByName("Não existe receita com esse nome ");
+        }
         recipesRepository.deleteByName(name);
+    }
+
+    public RecipesDto updateRecipe(String name, RecipesDto recipesDto) {
+        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameValidation(name);
+        if (recipesModelOptional.isEmpty()) {
+            throw new HandleRecipeNoExistsByName("Não existe receita com esse nome ");
+        }
+
+        RecipesModel recipe = recipesModelOptional.get();
+        if (recipesDto.getName() != null) {
+            if (recipesDto.getName().equalsIgnoreCase(recipe.getName())) {
+                throw new HandleRecipeExistsByName("Já existe uma receita com esse nome");
+            }
+            recipe.setName(recipesDto.getName());
+        }
+
+        if (recipesDto.getIngredients() != null) {
+            recipe.setIngredients(recipesDto.getIngredients());
+        }
+        if (recipesDto.getMethodPreparation() != null) {
+            recipe.setMethodPreparation(recipesDto.getMethodPreparation());
+        }
+        if (recipesDto.getClassification() != null) {
+            recipe.setClassification(recipesDto.getClassification());
+        }
+        recipesRepository.save(recipe);
+        return recipesMapper.toRecipesDto(recipe);
     }
 }
