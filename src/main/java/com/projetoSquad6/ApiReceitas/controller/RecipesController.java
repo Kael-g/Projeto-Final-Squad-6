@@ -7,6 +7,7 @@ import com.projetoSquad6.ApiReceitas.service.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class RecipesController {
     RecipesService recipesService;
 
     @PostMapping
-    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesModel recipesModel) {
+    public ResponseEntity<?> recipieDatabase(@RequestBody @Validated RecipesModel recipesModel) {
         RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
 
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
