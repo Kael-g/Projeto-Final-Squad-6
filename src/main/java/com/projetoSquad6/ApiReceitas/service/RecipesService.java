@@ -86,8 +86,8 @@ public class RecipesService {
         if (recipesDto.getMethodPreparation() != null) {
             recipe.setMethodPreparation(recipesDto.getMethodPreparation());
         }
-        if (recipesDto.getClassification() != null) {
-            recipe.setClassification(recipesDto.getClassification());
+        if (recipesDto.getClassifications() != null) {
+            recipe.setClassifications(recipesDto.getClassifications());
         }
         recipesRepository.save(recipe);
         return recipesMapper.toRecipesDto(recipe);

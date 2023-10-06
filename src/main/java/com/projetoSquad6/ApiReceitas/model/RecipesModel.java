@@ -1,14 +1,11 @@
 package com.projetoSquad6.ApiReceitas.model;
 
-import com.projetoSquad6.ApiReceitas.enums.RecipeEnum;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +26,11 @@ public class RecipesModel {
   @Column(name = "methodPreparation", nullable = false)
   private String methodPreparation;
   @Enumerated(EnumType.STRING)
-  @NotNull
-  private RecipeEnum classification;
+  @ManyToMany
+  @JoinTable(name = "tb_recipes_classifications",
+          joinColumns = @JoinColumn (name = "id_recipe"),
+          inverseJoinColumns = @JoinColumn(name = "id_classification"))
+  private List<ClassificationModel> classifications;
 
   public void setIngredients(List<String> ingredients) {
     this.ingredients = String.join(", ", ingredients);

@@ -12,7 +12,7 @@ public class RecipesMapper {
     recipesDto.setName(recipesModel.getName());
     recipesDto.setIngredients(recipesModel.getIngredients());
     recipesDto.setMethodPreparation(recipesModel.getMethodPreparation());
-    recipesDto.setClassification(recipesModel.getClassification());
+    recipesDto.setClassifications(recipesModel.getClassifications());
 
     return recipesDto;
   }

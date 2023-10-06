@@ -1,6 +1,6 @@
 package com.projetoSquad6.ApiReceitas.model.dto;
 
-import com.projetoSquad6.ApiReceitas.enums.RecipeEnum;
+import com.projetoSquad6.ApiReceitas.model.ClassificationModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +16,5 @@ public class RecipesDto {
   private String name;
   private List<String> ingredients;
   private String methodPreparation;
-  private RecipeEnum classification;
+  private List<ClassificationModel> classifications;
 }
