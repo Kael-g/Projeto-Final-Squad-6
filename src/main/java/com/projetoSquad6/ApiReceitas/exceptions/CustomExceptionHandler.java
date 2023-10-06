@@ -28,6 +28,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     body.put("timestamp", new Date());
     body.put("message", e.getMessage());
 
-    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
   }
 }
