@@ -26,6 +26,11 @@ public class RecipesService {
 
     public List<RecipesDto> findAll(){
         List<RecipesModel> recipes = recipesRepository.findAll();
+
+        if (recipes.isEmpty()) {
+            throw new HandleRecipeNoExistsByName("Nenhuma receita cadastrada!");
+        }
+
         List<RecipesDto> recipesDtos = new ArrayList<>();
 
         for(RecipesModel recipesModel: recipes) {
