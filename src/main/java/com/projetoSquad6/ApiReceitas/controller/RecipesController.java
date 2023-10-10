@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -42,9 +41,10 @@ public class RecipesController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping(path = "/findByRestriction")
-    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
-        return null;
+    @GetMapping(path = "/searchByClassification")
+    public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
+        List<RecipesDto> recipes = recipesService.findByClassification(classifications);
+        return ResponseEntity.ok(recipes);
     }
 
     @DeleteMapping(path = "/deleteByName")
