@@ -4,6 +4,10 @@ import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 
 import com.projetoSquad6.ApiReceitas.service.RecipesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +19,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/recipes")
+@Tag(name = "CookBookAPI")
 public class RecipesController {
     @Autowired
     RecipesService recipesService;
 
+    @Operation(summary = "Registro de receitas",
+        description = "Esse endpoint é responsável pelo cadastro de receitas, onde deve ser passado pelo" +
+        " body o nome, a lista de ingredientes, o modo de preparo e a classificação da receita. Em caso de " +
+        "já existir uma receita com o mesmo nome cadastrada, uma mensagem será retornada.", method = "POST")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Receita cadastrada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome")
+    })
     @PostMapping
     public ResponseEntity<?> recipieDatabase(@RequestBody @Validated RecipesModel recipesModel) {
         RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
@@ -26,6 +39,13 @@ public class RecipesController {
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Listar receitas cadastradas",
+        description = "Esse endpoint é o responsável por listar todas as receitas cadastradas, " +
+        "retornando todas as informações das receitas.", method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso."),
+        @ApiResponse(responseCode = "404", description = "Nenhuma receita cadastrada.")
+    })
     @GetMapping
     public ResponseEntity<List<RecipesDto>> displayAllRecipes() {
         return ResponseEntity.ok(recipesService.findAll());
@@ -36,7 +56,14 @@ public class RecipesController {
         return null;
     }
 
-    @GetMapping("/")
+    @Operation(summary = "Buscar uma ou mais receitas",
+        description = "Nesse endpoint é possível procurar por uma ou mais receitas apenas passando o(s) " +
+        "nome(s) como um parametro na url, e ele irá retornar as receitas correspondentes.", method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+    })
+    @GetMapping(path = "/")
     public ResponseEntity<List<RecipesDto>>searchByNameRecipies(@RequestParam("name") List<String> name){
         List<RecipesDto> recipes = recipesService.findByName(name);
         return ResponseEntity.ok(recipes);
@@ -47,14 +74,32 @@ public class RecipesController {
         return null;
     }
 
-    @DeleteMapping("/")
+    @Operation(summary = "Deletar uma receita",
+        description = "Este endpoint é responsável por deletar uma receita, bastando passar o nome da " +
+        "receita como um parâmetro pela url. Caso não exista uma receita com esse nome, uma mensagem será " +
+        "retornada.", method = "DELETE")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Deletado com sucesso."),
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+    })
+    @DeleteMapping(path = "/")
     public ResponseEntity deleteByName(@RequestParam("name") String name){
        recipesService.deleteByName(name);
        return ResponseEntity.ok("Deletado com sucesso");
     }
 
 
-    @PutMapping("/")
+    @Operation(summary = "Editar/atualizar uma receita",
+        description = "Nesse endpoint é possível editar/atualizar qualquer informação de uma receita, " +
+        "para isso, o nome da receita deve ser passado como um parâmetro na url, e a informação que deseja " +
+        "atualizar, no corpo da requisição, caso tente atualizar o nome da receita para outro nome ja " +
+        "existente no catálogo, uma mensagem será retornada", method = "PUT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Receita atualizada com sucesso."),
+        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome."),
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+    })
+    @PutMapping(path = "/")
     public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
                                                      @RequestBody RecipesDto recipesDto){
         return ResponseEntity.ok(recipesService.updateRecipe(name, recipesDto));
