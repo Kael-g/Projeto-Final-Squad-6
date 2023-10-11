@@ -298,7 +298,7 @@ Irá passar no parâmetro as classificações ingredientes que queira na receita
 ```
 * Exemplo do corpo de solicitação
 ```bash
-Key : classifications  
+Key : classification  
 Value: VEGETARIAN
 ```
 * Exemplo de Reposta de Sucesso: 
@@ -308,18 +308,18 @@ Status 200 OK
   "name": "bolo de limao",
   "ingredients": ["limao, farinha, leite"], 
   "methodPreparation": "Instruções de preparação da receita",
-  "classification": "VEGETARIAN"
+  "classifications": "VEGETARIAN"
 }
 {
   "name": "bolo de chocolate",
   "ingredients": ["chocolate, farinha, leite"], 
   "methodPreparation": "Instruções de preparação da receita",
-  "classification": "VEGETARIAN"
+  "classifications": "VEGETARIAN"
 }
 ```
 * Exemplo de URL:
 ```bash
-http://localhost:8080/api/recipes/searchByClassification?classification=VEGAN,VEGETARIAN
+http://localhost:8080/api/recipes/classifications?classification=VEGAN,VEGETARIAN
 ```
 * Exemplo de Reposta de erro caso não existir receitas com aquela classificação:
 ```bash
