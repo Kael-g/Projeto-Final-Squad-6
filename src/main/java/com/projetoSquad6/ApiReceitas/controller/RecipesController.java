@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -36,7 +36,7 @@ public class RecipesController {
         return null;
     }
 
-    @GetMapping(path = "/findByName")
+    @GetMapping("/")
     public ResponseEntity<List<RecipesDto>>searchByNameRecipies(@RequestParam("name") List<String> name){
         List<RecipesDto> recipes = recipesService.findByName(name);
         return ResponseEntity.ok(recipes);
@@ -47,14 +47,14 @@ public class RecipesController {
         return null;
     }
 
-    @DeleteMapping(path = "/deleteByName")
+    @DeleteMapping("/")
     public ResponseEntity deleteByName(@RequestParam("name") String name){
        recipesService.deleteByName(name);
        return ResponseEntity.ok("Deletado com sucesso");
     }
 
 
-    @PutMapping(path = "/updateByName")
+    @PutMapping("/")
     public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
                                                      @RequestBody RecipesDto recipesDto){
         return ResponseEntity.ok(recipesService.updateRecipe(name, recipesDto));

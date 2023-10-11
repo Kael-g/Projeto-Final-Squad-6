@@ -26,6 +26,11 @@ public class RecipesService {
 
     public List<RecipesDto> findAll(){
         List<RecipesModel> recipes = recipesRepository.findAll();
+
+        if (recipes.isEmpty()) {
+            throw new HandleRecipeNoExistsByName("Nenhuma receita cadastrada!");
+        }
+
         List<RecipesDto> recipesDtos = new ArrayList<>();
 
         for(RecipesModel recipesModel: recipes) {
@@ -59,7 +64,7 @@ public class RecipesService {
     }
 
     public void deleteByName(String name){
-        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameValidation(name);
+        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameIgnoreCase(name);
         if (recipesModelOptional.isEmpty()) {
             throw new HandleRecipeNoExistsByName("Não existe receita com esse nome ");
         }
@@ -67,17 +72,17 @@ public class RecipesService {
     }
 
     public RecipesDto updateRecipe(String name, RecipesDto recipesDto) {
-        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameValidation(name);
+        Optional<RecipesModel> recipesModelOptional = recipesRepository.findByNameIgnoreCase(name);
         if (recipesModelOptional.isEmpty()) {
             throw new HandleRecipeNoExistsByName("Não existe receita com esse nome ");
         }
 
         RecipesModel recipe = recipesModelOptional.get();
         if (recipesDto.getName() != null) {
-            if (recipesDto.getName().equalsIgnoreCase(recipe.getName())) {
+              if (recipesRepository.findByNameIgnoreCase(recipesDto.getName()).isPresent()) {
                 throw new HandleRecipeExistsByName("Já existe uma receita com esse nome");
             }
-            recipe.setName(recipesDto.getName());
+        recipe.setName(recipesDto.getName());
         }
 
         if (recipesDto.getIngredients() != null) {
