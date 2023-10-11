@@ -1,14 +1,9 @@
 package com.projetoSquad6.ApiReceitas.model;
 
-import com.projetoSquad6.ApiReceitas.enums.RecipeEnum;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,9 +23,10 @@ public class RecipesModel {
   private String ingredients;
   @Column(name = "methodPreparation", nullable = false)
   private String methodPreparation;
+  @ElementCollection(targetClass = ClassificationEnum.class)
   @Enumerated(EnumType.STRING)
-  @NotNull
-  private RecipeEnum classification;
+  @CollectionTable(name = "classifications", joinColumns = @JoinColumn(name = "idRecipe"))
+  private List<ClassificationEnum> classifications;
 
   public void setIngredients(List<String> ingredients) {
     this.ingredients = String.join(", ", ingredients);

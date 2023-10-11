@@ -2,7 +2,6 @@ package com.projetoSquad6.ApiReceitas.controller;
 
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
-
 import com.projetoSquad6.ApiReceitas.service.RecipesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,9 +50,30 @@ public class RecipesController {
         return ResponseEntity.ok(recipesService.findAll());
     }
 
-    @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByIngredients(@RequestParam("nome") String nome){
-        return null;
+    @Operation(summary = "Busca através de ingredientes",
+    description = "Com esse endpoint é possível fazer dois tipos de busca, por receitas que contenham uma " +
+        "lista de ingredientes específicos, ou por receitas que possam conter mais ingredientes além " +
+        "daqueles buscados, para isso é preciso passar a lista de ingredientes como parâmetro na url da " +
+        "requisição, e caso seja a busca por uma receita que possa contem mais ingredientes além dos " +
+        "buscados, é preciso adicionar o parâmetro 'exact' no searchType da url.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+        @ApiResponse(responseCode = "404", description = "Não existe receita somente com esses ingredientes"),
+        @ApiResponse(responseCode = "400", description = "A busca está vazia, favor insira os ingredientes para busca")
+    })
+    @GetMapping(path ="/ingredients")
+    public ResponseEntity<List<RecipesDto>> searchIngredients(
+            @RequestParam("ingredients") List<String> ingredients,
+            @RequestParam(name = "searchType", defaultValue = "contains") String searchType) {
+        List<RecipesDto> recipes;
+
+        if ("exact".equalsIgnoreCase(searchType)) {
+            recipes = recipesService.findByIngredients(ingredients);
+        } else {
+            recipes = recipesService.searchByIngredient(ingredients);
+        }
+
+        return ResponseEntity.ok(recipes);
     }
 
     @Operation(summary = "Buscar uma ou mais receitas",
@@ -69,9 +89,20 @@ public class RecipesController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping(path = "/findByRestriction")
-    public ResponseEntity<List<RecipesModel>>searchByRestriction(@RequestParam("nome") String nome){
-        return null;
+    @Operation(summary = "Buscar receitas pela restrição alimentar",
+    description = "Nesse endpoint é possível buscar receitas utilizando como parâmetro a restrição " +
+        "alimentar, que deve ser passada como um parâmetro na url e irá retornar as receitas correspondetes" +
+        ".", method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+        @ApiResponse(responseCode = "400", description = "Busca por restrições deve conter ao menos uma " +
+            "restrição alimentar"),
+        @ApiResponse(responseCode = "404", description = "Não existem receitas compatíveis com a busca")
+    })
+    @GetMapping(path = "/classification")
+    public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
+        List<RecipesDto> recipes = recipesService.findByClassification(classifications);
+        return ResponseEntity.ok(recipes);
     }
 
     @Operation(summary = "Deletar uma receita",
@@ -87,7 +118,6 @@ public class RecipesController {
        recipesService.deleteByName(name);
        return ResponseEntity.ok("Deletado com sucesso");
     }
-
 
     @Operation(summary = "Editar/atualizar uma receita",
         description = "Nesse endpoint é possível editar/atualizar qualquer informação de uma receita, " +
