@@ -1,9 +1,14 @@
 package com.projetoSquad6.ApiReceitas.controller;
 
+import com.projetoSquad6.ApiReceitas.exceptions.CustomExceptionHandler;
+import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 import com.projetoSquad6.ApiReceitas.service.RecipesService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +33,18 @@ public class RecipesController {
         " body o nome, a lista de ingredientes, o modo de preparo e a classificação da receita. Em caso de " +
         "já existir uma receita com o mesmo nome cadastrada, uma mensagem será retornada.", method = "POST")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Receita cadastrada com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome")
+        @ApiResponse(responseCode = "200", description = "Receita cadastrada com sucesso", content = {
+            @Content(examples = {
+                @ExampleObject(name = "Receita cadastrada",
+                summary = "Response após cadastrar uma receita",
+                value = "[{\"name\": \"nome\", \"ingredients\": [\"str1\", \"str2\", \"str3\"], " +
+                    "\"methodPreparation\": \"string\", \"classification\": \"vegan\"}]")
+            })
+        }),
+        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Já existe uma " +
+                "receita com esse nome"))
+        })
     })
     @PostMapping
     public ResponseEntity<?> recipieDatabase(@RequestBody @Validated RecipesModel recipesModel) {
@@ -99,7 +114,7 @@ public class RecipesController {
             "restrição alimentar"),
         @ApiResponse(responseCode = "404", description = "Não existem receitas compatíveis com a busca")
     })
-    @GetMapping(path = "/classification")
+    @GetMapping(path = "/classifications")
     public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
         List<RecipesDto> recipes = recipesService.findByClassification(classifications);
         return ResponseEntity.ok(recipes);
