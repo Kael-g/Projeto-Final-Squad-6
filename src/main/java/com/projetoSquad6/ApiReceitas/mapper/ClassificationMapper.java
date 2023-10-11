@@ -4,6 +4,9 @@ import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeNoExistsByName;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ClassificationMapper {
     public ClassificationEnum toEnum(String restriction) {
@@ -12,5 +15,13 @@ public class ClassificationMapper {
         } catch (Exception e){
             throw new HandleRecipeNoExistsByName("Restrição inválida");
         }
+    }
+
+    public List<String> enumsToString(List<ClassificationEnum> classificationEnums){
+        List<String> classificationsString = new ArrayList<>();
+        for (ClassificationEnum classificationEnum : classificationEnums){
+            classificationsString.add(classificationEnum.toString());
+        }
+        return classificationsString;
     }
 }
