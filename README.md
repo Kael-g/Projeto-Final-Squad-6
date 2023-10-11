@@ -1,6 +1,6 @@
 # Projeto Final - Squad 6
 <h1 align="center">
-      <a href="#" alt="site do ecoleta"> BookCookAPI </a>
+      <a href="#" alt="site do ecoleta"> CookBookAPI </a>
 </h1>
 <h4 align="center">
 	🏗️   Em execução  🚧
@@ -47,7 +47,7 @@ Os usuários podem:
 - name (String): O novo nome da receita.
 - ingredients (Array de Strings): A nova lista de ingredientes da receita.
 - methodPreparation (String): As novas instruções para preparar a receita.
-- classification (Arrays de Enum): VEGAN,VEGETARIAN,LACTOSE_FREE,GLUTEN_FREE,NO_CLASSIFICATION;
+- classifications (Arrays de Enum): VEGAN,VEGETARIAN,LACTOSE_FREE,GLUTEN_FREE,NO_CLASSIFICATION;
 ```
 * Exemplo de Corpo da solicitação: 
 ```bash
@@ -102,7 +102,7 @@ Value: bolo de limao
   "name": "alterar nome do bolo",
   "ingredients": ["alterar ou acrescentar ingredientes"], 
   "methodPreparation": "Alterar a Instruções de preparação da receita",
-  "classifications": ["alterar ou acrescentar classificação"]
+  "classifications": ["VEGAN"]
 }
 ```
 * Exemplo de Reposta de Sucesso: 
@@ -113,7 +113,7 @@ Status 200 OK
   "name": "alterar nome do bolo",
   "ingredients": ["alterar ou acrescentar ingredientes"], 
   "methodPreparation": "Alterar a Instruções de preparação da receita",
-  "classifications": ["alterar ou acrescentar classificação"]
+  "classifications": ["VEGAN"]
 }
 ```
 * Exemplo de URL:
@@ -416,7 +416,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 -   Mockito
 -   JUnit
 -   Spring testing
-
+-   H2 Database
 
 #### **Backend**
 
@@ -424,6 +424,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
 -   Maven 
 -   Spring boot 2.7.16 
 -   Lombok , Spring Data JPA , Spring Web , PostgreSQL Driver , Spring Security, Spring Validation
+-   Docker
+-   Dbehaver
 
 
 #### **Infra**
