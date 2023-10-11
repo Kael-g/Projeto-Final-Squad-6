@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,11 +50,22 @@ public class RecipesService {
         return recipesDtos;
     }
 
-    public RecipesDto createRecipe(RecipesModel recipesModel) {
+    public RecipesDto createRecipe(RecipesDto recipesDto) {
+        RecipesModel recipesModel = new RecipesModel();
 
-        if (recipesRepository.findByNameIgnoreCase(recipesModel.getName()).isPresent()) {
-            throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
+        if(isNameValid(recipesDto.getName())) {
+            recipesModel.setName(recipesDto.getName());
         }
+
+        if(isIngredientsValid(recipesDto.getIngredients())) {
+            recipesModel.setIngredients(recipesDto.getIngredients());
+        }
+
+        if(isMethodPreparationValid(recipesDto.getMethodPreparation())) {
+            recipesModel.setMethodPreparation(recipesDto.getMethodPreparation());
+        }
+
+        recipesModel.setClassifications(classificationsValidation(recipesDto.getClassifications()));
 
         return recipesMapper.toRecipesDto(recipesRepository.save(recipesModel));
     }
@@ -102,7 +114,9 @@ public class RecipesService {
             recipe.setMethodPreparation(recipesDto.getMethodPreparation());
         }
         if (recipesDto.getClassifications() != null) {
-            recipe.setClassifications(recipesDto.getClassifications());
+            recipe.setClassifications(recipesDto.getClassifications().stream()
+                    .map(classificationMapper::toEnum)
+                    .collect(Collectors.toList()));
         }
         recipesRepository.save(recipe);
         return recipesMapper.toRecipesDto(recipe);
@@ -184,4 +198,56 @@ public class RecipesService {
 
             throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
         }
+    private boolean isNameValid(String name){
+        if (recipesRepository.findByNameIgnoreCase(name).isPresent()) {
+            throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + name);
+        }
+
+        if (name == null || name.isEmpty() || name.isBlank()){
+            throw new HandleRecipeExistsByName("Nome da receita não pode ser vazio");
+        }
+
+        return true;
+    }
+
+    private boolean isIngredientsValid(List<String> ingredients){
+        if (ingredients == null || ingredients.isEmpty()){
+            throw new HandleRecipeExistsByName("Receita deve conter ao menos um ingrediente");
+        }
+
+        boolean isIngredientBlank = false;
+
+        for (String ingredient : ingredients){
+            if (ingredient.isBlank()){
+                isIngredientBlank = true;
+                break;
+            }
+        }
+
+        if (isIngredientBlank){
+            throw new HandleRecipeExistsByName("Ingredientes devem conter ao menos um caractere");
+        }
+
+        return true;
+    }
+
+    private boolean isMethodPreparationValid(String methodPreparation){
+        if (methodPreparation == null || methodPreparation.isEmpty()){
+            throw new HandleRecipeExistsByName("Método de preparo da receita não pode ser vazio");
+        }
+
+        return true;
+    }
+
+    private List<ClassificationEnum> classificationsValidation(List<String> classificationsString){
+        List<ClassificationEnum> classificationsEnum = new ArrayList<>();
+        if (classificationsString == null || classificationsString.isEmpty()){
+            classificationsEnum.add(ClassificationEnum.NO_CLASSIFICATION);
+            return classificationsEnum;
+        }
+        return classificationsString.stream()
+                    .map(classificationMapper::toEnum)
+                    .collect(Collectors.toList());
+    }
+
 }

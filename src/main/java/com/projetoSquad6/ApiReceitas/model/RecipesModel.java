@@ -19,7 +19,7 @@ public class RecipesModel {
   private Long id;
   @Column(name = "name", nullable = false , unique = true, columnDefinition = "text")
   private String name;
-  @Column(name = "ingredients", length = 5000)
+  @Column(name = "ingredients", nullable = false, length = 5000)
   private String ingredients;
   @Column(name = "methodPreparation", nullable = false)
   private String methodPreparation;

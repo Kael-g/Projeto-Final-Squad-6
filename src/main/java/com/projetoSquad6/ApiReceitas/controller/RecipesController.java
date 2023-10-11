@@ -21,8 +21,8 @@ public class RecipesController {
     RecipesService recipesService;
 
     @PostMapping
-    public ResponseEntity<?> recipieDatabase(@RequestBody @Validated RecipesModel recipesModel) {
-        RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
+    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesDto recipesDto) {
+        RecipesDto newRecipe = recipesService.createRecipe(recipesDto);
 
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
@@ -53,7 +53,7 @@ public class RecipesController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping(path = "/searchByClassification")
+    @GetMapping(path = "/classification")
     public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
         List<RecipesDto> recipes = recipesService.findByClassification(classifications);
         return ResponseEntity.ok(recipes);
