@@ -53,7 +53,7 @@ public class RecipesController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping(path = "/classification")
+    @GetMapping(path = "/classifications")
     public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
         List<RecipesDto> recipes = recipesService.findByClassification(classifications);
         return ResponseEntity.ok(recipes);
