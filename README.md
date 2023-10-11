@@ -480,7 +480,7 @@ ____
 
 ## 🦸 Squad 
 
-PO
+Product Owner
 - Lead 1 - Diego de Sena Bastos
 
 Teach Lead's
