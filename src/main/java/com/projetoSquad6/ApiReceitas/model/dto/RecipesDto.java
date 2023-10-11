@@ -16,5 +16,5 @@ public class RecipesDto {
   private String name;
   private List<String> ingredients;
   private String methodPreparation;
-  private List<ClassificationEnum> classifications;
+  private List<String> classifications;
 }

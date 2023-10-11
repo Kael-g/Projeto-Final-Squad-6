@@ -1,8 +1,5 @@
 package com.projetoSquad6.ApiReceitas.controller;
 
-import com.projetoSquad6.ApiReceitas.exceptions.CustomExceptionHandler;
-import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
-import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 import com.projetoSquad6.ApiReceitas.service.RecipesService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,8 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +36,7 @@ public class RecipesController {
                 summary = "Response após cadastrar uma receita",
                 value = "[{\"name\": \"nome\", \"ingredients\": [\"str1\", \"str2\", \"str3\"], " +
                     "\"methodPreparation\": \"string\", \"classification\": \"vegan\"}]")
-            })
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)
         }),
         @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome", content = {
             @Content(mediaType = "application/json", schema = @Schema(example = "message: Já existe uma " +
@@ -47,8 +44,8 @@ public class RecipesController {
         })
     })
     @PostMapping
-    public ResponseEntity<?> recipieDatabase(@RequestBody @Validated RecipesModel recipesModel) {
-        RecipesDto newRecipe = recipesService.createRecipe(recipesModel);
+    public ResponseEntity<?> recipieDatabase(@RequestBody RecipesDto recipesDto) {
+        RecipesDto newRecipe = recipesService.createRecipe(recipesDto);
 
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
@@ -58,7 +55,10 @@ public class RecipesController {
         "retornando todas as informações das receitas.", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Nenhuma receita cadastrada.")
+        @ApiResponse(responseCode = "404", description = "Nenhuma receita cadastrada.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Nenhuma receita " +
+                "cadastrada."))
+        })
     })
     @GetMapping
     public ResponseEntity<List<RecipesDto>> displayAllRecipes() {
@@ -73,8 +73,16 @@ public class RecipesController {
         "buscados, é preciso adicionar o parâmetro 'exact' no searchType da url.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Não existe receita somente com esses ingredientes"),
-        @ApiResponse(responseCode = "400", description = "A busca está vazia, favor insira os ingredientes para busca")
+        @ApiResponse(responseCode = "404", description = "Não existe receita somente com esses " +
+            "ingredientes", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
+                "receita somente com esses ingredientes."))
+        }),
+        @ApiResponse(responseCode = "400", description = "A busca está vazia, favor insira os ingredientes " +
+            "para busca", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: A busca está " +
+                "vazia, por favor insira os ingredientes para efetuar a busca."))
+        })
     })
     @GetMapping(path ="/ingredients")
     public ResponseEntity<List<RecipesDto>> searchIngredients(
@@ -87,7 +95,6 @@ public class RecipesController {
         } else {
             recipes = recipesService.searchByIngredient(ingredients);
         }
-
         return ResponseEntity.ok(recipes);
     }
 
@@ -96,7 +103,10 @@ public class RecipesController {
         "nome(s) como um parametro na url, e ele irá retornar as receitas correspondentes.", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
+                "receita com esse nome."))
+        })
     })
     @GetMapping(path = "/")
     public ResponseEntity<List<RecipesDto>>searchByNameRecipies(@RequestParam("name") List<String> name){
@@ -111,8 +121,14 @@ public class RecipesController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
         @ApiResponse(responseCode = "400", description = "Busca por restrições deve conter ao menos uma " +
-            "restrição alimentar"),
-        @ApiResponse(responseCode = "404", description = "Não existem receitas compatíveis com a busca")
+            "restrição alimentar", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: A busca por " +
+                "restrições deve conter ao menos uma restrição alimentar."))
+        }),
+        @ApiResponse(responseCode = "404", description = "Não existem receitas compatíveis com a busca", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existem " +
+                "receitas compativeis com a busca."))
+        })
     })
     @GetMapping(path = "/classifications")
     public ResponseEntity<List<RecipesDto>> serchByClassification(@RequestParam("classification") List<String> classifications){
@@ -125,8 +141,13 @@ public class RecipesController {
         "receita como um parâmetro pela url. Caso não exista uma receita com esse nome, uma mensagem será " +
         "retornada.", method = "DELETE")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Deletado com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+        @ApiResponse(responseCode = "200", description = "Deletado com sucesso.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "Deletado com sucesso."))
+        }),
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
+                "receita com esse nome."))
+        })
     })
     @DeleteMapping(path = "/")
     public ResponseEntity deleteByName(@RequestParam("name") String name){
@@ -140,9 +161,22 @@ public class RecipesController {
         "atualizar, no corpo da requisição, caso tente atualizar o nome da receita para outro nome ja " +
         "existente no catálogo, uma mensagem será retornada", method = "PUT")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Receita atualizada com sucesso."),
-        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome."),
-        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.")
+        @ApiResponse(responseCode = "200", description = "Receita atualizada com sucesso.", content = {
+            @Content(examples = {
+                @ExampleObject(name = "Receita atualizada",
+                    summary = "Response após atualizar uma receita",
+                    value = "[{\"name\": \"nome\", \"ingredients\": [\"str1\", \"str2\", \"str3\"], " +
+                        "\"methodPreparation\": \"string\", \"classification\": \"vegan\"}]")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)
+        }),
+        @ApiResponse(responseCode = "400", description = "Já existe uma receita com esse nome.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Já existe uma " +
+                "receita com esse nome"))
+        }),
+        @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.", content = {
+            @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
+                "receita com esse nome."))
+        })
     })
     @PutMapping(path = "/")
     public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
