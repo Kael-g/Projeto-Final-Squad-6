@@ -1,12 +1,16 @@
 package com.projetoSquad6.ApiReceitas.service;
 
+
+import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleNoFoundIngredients;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeNoExistsByName;
 import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
+import com.projetoSquad6.ApiReceitas.mapper.ClassificationMapper;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 import com.projetoSquad6.ApiReceitas.repository.RecipesRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RecipesService {
     @Autowired
     RecipesRepository recipesRepository;
@@ -24,6 +29,9 @@ public class RecipesService {
 
     @Autowired
     RecipesMapper recipesMapper;
+
+    @Autowired
+    ClassificationMapper classificationMapper;
 
 
     public List<RecipesDto> findAll() {
@@ -46,8 +54,8 @@ public class RecipesService {
         if (recipesRepository.findByNameIgnoreCase(recipesModel.getName()).isPresent()) {
             throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + recipesModel.getName());
         }
-        recipesRepository.save(recipesModel);
-        return recipesMapper.toRecipesDto(recipesModel);
+
+        return recipesMapper.toRecipesDto(recipesRepository.save(recipesModel));
     }
 
 
@@ -93,13 +101,45 @@ public class RecipesService {
         if (recipesDto.getMethodPreparation() != null) {
             recipe.setMethodPreparation(recipesDto.getMethodPreparation());
         }
-        if (recipesDto.getClassification() != null) {
-            recipe.setClassification(recipesDto.getClassification());
+        if (recipesDto.getClassifications() != null) {
+            recipe.setClassifications(recipesDto.getClassifications());
         }
         recipesRepository.save(recipe);
         return recipesMapper.toRecipesDto(recipe);
     }
 
+    public List<RecipesDto> findByClassification(List<String> classifications) {
+        if (classifications.isEmpty()){
+            throw new HandleRecipeExistsByName("Busca por restrições deve conter ao menos uma restrição alimentar");
+        }
+        List<RecipesModel> recipes = recipesRepository.findAll();
+        List<RecipesModel> recipesMatchingClassifications = new ArrayList<>();
+        List<ClassificationEnum> classificationEnums = classifications.stream().map(classificationMapper::toEnum).collect(Collectors.toList());
+        boolean matchesClassification;
+
+        for (RecipesModel recipe : recipes) {
+            matchesClassification = false;
+            for (ClassificationEnum classification : classificationEnums) {
+                if (recipe.getClassifications().contains(classification)) {
+                    matchesClassification = true;
+                } else {
+                    matchesClassification = false;
+                    break;
+                }
+            }
+            if (matchesClassification){
+                recipesMatchingClassifications.add(recipe);
+            }
+        }
+        if (!recipesMatchingClassifications.isEmpty()) {
+            return recipesMatchingClassifications.stream()
+                    .map(recipesMapper::toRecipesDto)
+                    .collect(Collectors.toList());
+        }
+        throw new HandleRecipeNoExistsByName("Não existem receitas compatíveis com a busca");
+    }
+
+  
     public List<RecipesDto> searchByIngredient(List<String> ingredients) {
         if (ingredients.size() > 0) {
             List<RecipesModel> recipesModels = recipesRepository.findAll();
@@ -121,6 +161,7 @@ public class RecipesService {
         return ingredientsToLowerCase.containsAll(ingredientsIn);
     }
 
+  
     public List<RecipesDto> findByIngredients(List<String> ingredients) {
         List<RecipesDto> recipes = new ArrayList<>();
         if (ingredients.size() > 0) {
@@ -143,7 +184,4 @@ public class RecipesService {
 
             throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
         }
-
-
-
 }
