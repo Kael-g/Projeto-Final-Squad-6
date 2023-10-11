@@ -1,6 +1,8 @@
 package com.projetoSquad6.ApiReceitas.service;
 
+
 import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
+import com.projetoSquad6.ApiReceitas.exceptions.HandleNoFoundIngredients;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeNoExistsByName;
 import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
@@ -11,6 +13,7 @@ import com.projetoSquad6.ApiReceitas.repository.RecipesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,11 @@ public class RecipesService {
 
     public List<RecipesDto> findAll() {
         List<RecipesModel> recipes = recipesRepository.findAll();
+
+        if (recipes.isEmpty()) {
+            throw new HandleRecipeNoExistsByName("Nenhuma receita cadastrada!");
+        }
+
         List<RecipesDto> recipesDtos = new ArrayList<>();
 
         for (RecipesModel recipesModel : recipes) {
@@ -81,7 +89,7 @@ public class RecipesService {
 
         RecipesModel recipe = recipesModelOptional.get();
         if (recipesDto.getName() != null) {
-            if (recipesDto.getName().equalsIgnoreCase(recipe.getName())) {
+            if (recipesRepository.findByNameIgnoreCase(recipesDto.getName()).isPresent()) {
                 throw new HandleRecipeExistsByName("Já existe uma receita com esse nome");
             }
             recipe.setName(recipesDto.getName());
@@ -130,4 +138,50 @@ public class RecipesService {
         }
         throw new HandleRecipeNoExistsByName("Não existem receitas compatíveis com a busca");
     }
+
+  
+    public List<RecipesDto> searchByIngredient(List<String> ingredients) {
+        if (ingredients.size() > 0) {
+            List<RecipesModel> recipesModels = recipesRepository.findAll();
+            List<RecipesModel> filteredRecipes = recipesModels.stream().filter(recipesModel ->
+                            containAllingredients(recipesModel, ingredients))
+                    .collect(Collectors.toList());
+            if (filteredRecipes.isEmpty()) {
+                throw new HandleNoFoundIngredients("Não existe receita somente com esses ingredientes " + ingredients);
+            }
+
+            return filteredRecipes.stream().map(recipesMapper::toRecipesDto).collect(Collectors.toList());
+        }
+        throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
+    }
+
+    private boolean containAllingredients(RecipesModel recipesModel, List<String> ingredients) {
+        List<String> ingredientsToLowerCase = ingredients.stream().map(String::toLowerCase).collect(Collectors.toList());
+        List<String> ingredientsIn = recipesModel.getIngredients().stream().map(String::toLowerCase).collect(Collectors.toList());
+        return ingredientsToLowerCase.containsAll(ingredientsIn);
+    }
+
+  
+    public List<RecipesDto> findByIngredients(List<String> ingredients) {
+        List<RecipesDto> recipes = new ArrayList<>();
+        if (ingredients.size() > 0) {
+
+            for (String ingredient : ingredients) {
+                List<RecipesModel> ingredientsModels = recipesRepository.findByIngredients(ingredient.toLowerCase());
+
+                if (!ingredientsModels.isEmpty()) {
+                    recipes.addAll(ingredientsModels.stream()
+                            .map(recipesMapper::toRecipesDto)
+                            .collect(Collectors.toList()));
+                }
+            }
+
+            if (recipes.isEmpty()) {
+                throw new HandleNoFoundIngredients("Não existe receita com esse ingrediente ");
+            }
+            return recipes;
+        }
+
+            throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
+        }
 }

@@ -28,6 +28,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     body.put("timestamp", new Date());
     body.put("message", e.getMessage());
 
-    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
   }
+  @org.springframework.web.bind.annotation.ExceptionHandler(HandleNoFoundIngredients.class)
+  public ResponseEntity<Object> handleNoFoundIngredients(HandleNoFoundIngredients e) {
+
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("timestamp", new Date());
+    body.put("message", e.getMessage());
+
+    return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+  }
+
 }

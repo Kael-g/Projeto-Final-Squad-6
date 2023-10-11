@@ -22,7 +22,11 @@ public interface RecipesRepository extends JpaRepository<RecipesModel, Long> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM RecipesModel r WHERE r.name = :name")
-    void deleteByName(@Param("name")String name);
+    @Query("DELETE FROM RecipesModel r WHERE LOWER(r.name) = :name")
+    void deleteByName(@Param("name") String name);
+
+    @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.ingredients) LIKE %:ingredient%")
+    List<RecipesModel> findByIngredients(@Param("ingredient") String ingredient);
+
 
 }

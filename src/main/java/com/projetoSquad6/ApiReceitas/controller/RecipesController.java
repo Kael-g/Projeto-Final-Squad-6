@@ -1,5 +1,6 @@
 package com.projetoSquad6.ApiReceitas.controller;
 
+import com.projetoSquad6.ApiReceitas.exceptions.HandleNoFoundIngredients;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
 import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -30,13 +32,23 @@ public class RecipesController {
         return ResponseEntity.ok(recipesService.findAll());
     }
 
-    @GetMapping(path = "/findByIngredient")
-    public ResponseEntity<List<RecipesModel>>searchByIngredients(@RequestParam("nome") String nome){
-        return null;
+    @GetMapping("/ingredients")
+    public ResponseEntity<List<RecipesDto>> searchIngredients(
+            @RequestParam("ingredients") List<String> ingredients,
+            @RequestParam(name = "searchType", defaultValue = "contains") String searchType) {
+        List<RecipesDto> recipes;
+
+        if ("exact".equalsIgnoreCase(searchType)) {
+            recipes = recipesService.findByIngredients(ingredients);
+        } else {
+            recipes = recipesService.searchByIngredient(ingredients);
+        }
+
+        return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping(path = "/findByName")
-    public ResponseEntity<List<RecipesDto>>searchByNameRecipies(@RequestParam("name") List<String> name){
+    @GetMapping("/")
+    public ResponseEntity<List<RecipesDto>> searchByNameRecipies(@RequestParam("name") List<String> name) {
         List<RecipesDto> recipes = recipesService.findByName(name);
         return ResponseEntity.ok(recipes);
     }
@@ -47,16 +59,15 @@ public class RecipesController {
         return ResponseEntity.ok(recipes);
     }
 
-    @DeleteMapping(path = "/deleteByName")
-    public ResponseEntity deleteByName(@RequestParam("name") String name){
-       recipesService.deleteByName(name);
-       return ResponseEntity.ok("Deletado com sucesso");
+    @DeleteMapping("/")
+    public ResponseEntity deleteByName(@RequestParam("name") String name) {
+        recipesService.deleteByName(name);
+        return ResponseEntity.ok("Deletado com sucesso");
     }
 
-
-    @PutMapping(path = "/updateByName")
-    public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
-                                                     @RequestBody RecipesDto recipesDto){
+    @PutMapping("/")
+    public ResponseEntity<?> updateRecipies(@RequestParam("name") String name,
+                                            @RequestBody RecipesDto recipesDto) {
         return ResponseEntity.ok(recipesService.updateRecipe(name, recipesDto));
     }
 
