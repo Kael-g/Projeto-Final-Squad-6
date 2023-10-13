@@ -1,7 +1,7 @@
 package com.projetoSquad6.ApiReceitas.mapper;
 
 import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
-import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeNoExistsByName;
+import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class ClassificationMapper {
         try {
             return ClassificationEnum.valueOf(restriction);
         } catch (Exception e){
-            throw new HandleRecipeNoExistsByName("Restrição inválida");
+            throw new HandleRecipeExistsByName("Restrição inválida");
         }
     }
 

@@ -20,11 +20,6 @@ public interface RecipesRepository extends JpaRepository<RecipesModel, Long> {
     @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.name) IN :names")
     List<RecipesModel> findByName(@Param("names") List<String> names);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM RecipesModel r WHERE LOWER(r.name) = :name")
-    void deleteByName(@Param("name") String name);
-
     @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.ingredients) LIKE %:ingredient%")
     List<RecipesModel> findByIngredients(@Param("ingredient") String ingredient);
 
