@@ -28,5 +28,4 @@ public interface RecipesRepository extends JpaRepository<RecipesModel, Long> {
     @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.ingredients) LIKE %:ingredient%")
     List<RecipesModel> findByIngredients(@Param("ingredient") String ingredient);
 
-
 }
