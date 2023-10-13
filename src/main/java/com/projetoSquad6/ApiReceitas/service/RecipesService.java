@@ -90,7 +90,7 @@ public class RecipesService {
         if (recipesModelOptional.isEmpty()) {
             throw new HandleRecipeNoExistsByName("Não existe receita com esse nome ");
         }
-        recipesRepository.deleteByName(name);
+        recipesRepository.deleteById(recipesModelOptional.get().getId());
     }
 
     public RecipesDto updateRecipe(String name, RecipesDto recipesDto) {
@@ -126,10 +126,10 @@ public class RecipesService {
         if (classifications.isEmpty()){
             throw new HandleRecipeExistsByName("Busca por restrições deve conter ao menos uma restrição alimentar");
         }
-        List<RecipesModel> recipes = recipesRepository.findAll();
-        List<RecipesModel> recipesMatchingClassifications = new ArrayList<>();
         List<ClassificationEnum> classificationEnums = classifications.stream().map(classificationMapper::toEnum).collect(Collectors.toList());
         boolean matchesClassification;
+        List<RecipesModel> recipes = recipesRepository.findAll();
+        List<RecipesModel> recipesMatchingClassifications = new ArrayList<>();
 
         for (RecipesModel recipe : recipes) {
             matchesClassification = false;
