@@ -147,7 +147,16 @@ public class RecipesController {
         @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.", content = {
             @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
                 "receita com esse nome."))
-        })
+        }),
+            @ApiResponse(responseCode = "401", description = "Acesso não autorizado.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(example = "message: Acesso não autorizado "
+                    ))
+            })
+            ,
+            @ApiResponse(responseCode = "403", description = "Acesso proibido.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(example = "message: Acesso proibido. "
+                    ))
+            })
     })
     @DeleteMapping(path = "/")
     public ResponseEntity deleteByName(@RequestParam("name") String name){
@@ -176,7 +185,17 @@ public class RecipesController {
         @ApiResponse(responseCode = "404", description = "Não existe receita com esse nome.", content = {
             @Content(mediaType = "application/json", schema = @Schema(example = "message: Não existe " +
                 "receita com esse nome."))
-        })
+        }),
+            @ApiResponse(responseCode = "401", description = "Acesso não autorizado.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(example = "message: Acesso não autorizado "
+                    ))
+
+            }),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(example = "message: Acesso proibido. "
+                    ))
+            })
+
     })
     @PutMapping(path = "/")
     public  ResponseEntity<?>updateRecipies(@RequestParam("name") String name ,
