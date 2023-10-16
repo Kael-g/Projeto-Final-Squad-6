@@ -353,7 +353,6 @@ http://localhost:8080/api/recipes/classifications?classification=VEGAN,VEGETARIA
 "timestamp": "2023-10-10T18:23:51.754+00:00",
 "message": "Restrição inválida"
 ```
----
 ### 7. Cadastrar Usuários
 * Endpoint:/auth/register
 * Metodo HTTP : POST 
@@ -408,6 +407,7 @@ Status 200 OK
 Status 401 UNAUTHORIZED
 Usuário não cadastrado.
 ```
+---
 
 ## ✔️ Validações implementadas na API
 <details>
