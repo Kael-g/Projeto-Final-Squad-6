@@ -30,11 +30,13 @@ Tabela de conteúdos
 O BookCookAPI fornece uma vasta coleção de receitas culinárias.<br>
 Os usuários podem:
 * Cadastrar novas receitas;
-* Alterar informações das receitas;
-* Deletar uma receita pelo nome;
 * Pesquisar por nome de receita;
 * Pesquisar por ingredientes;
 * Pesquisar por filtro de restrição alimentar.
+Somente os usuários logados poderão:
+* Alterar informações das receitas;
+* Deletar uma receita pelo nome;
+
 ---
 
 ## ⚙️ Endpoints
@@ -130,6 +132,14 @@ http://localhost:8080/api/recipes/?nome=bolo de limao
 "timestamp": "2023-10-10T18:23:51.754+00:00",
 "message": "Já existe uma receita com esse nome"
 ```
+* Exemplo de Reposta de erro caso o usuario não estiver logado:
+```bash
+"message": "Acesso não autorizado. "
+```
+* Exemplo de Reposta de erro caso o usuario não estiver permissão:
+```bash
+"message": "Acesso proibido. "
+```
 ### 3. Deletar uma receita
 * Endpoint:/api/recipes/
 * Metodo HTTP : DELETE 
@@ -160,6 +170,13 @@ http://localhost:8080/api/recipes/?nome=bolo de limao
 "timestamp": "2023-10-10T18:23:51.754+00:00",
 "message": "Não existe receita com esse nome"
 ```
+* Exemplo de Reposta de erro caso o usuario não estiver logado:
+```bash
+"message": "Acesso não autorizado. "
+```
+* Exemplo de Reposta de erro caso o usuario não estiver permissão:
+```bash
+"message": "Acesso proibido. "
 ### 4. Pesquisar receita por nome.
 * Endpoint:/api/recipes/
 * Metodo HTTP : GET 
@@ -337,7 +354,60 @@ http://localhost:8080/api/recipes/classifications?classification=VEGAN,VEGETARIA
 "message": "Restrição inválida"
 ```
 ---
+### 7. Cadastrar Usuários
+* Endpoint:/auth/register
+* Metodo HTTP : POST 
+* Descrição: Cadastro de novas usuários;
+* Parâmetros da Solicitação:
+```bash
+- login (String): o username do usuário.
+- password (String): senha do usuário.
+```
+* Exemplo de Corpo da solicitação: 
+```bash
+POST/auth/register
+```
+```bash
+{
+  "login": "username",
+  "password": senha
+}
+```
+* Exemplo de Reposta de Sucesso: 
+```bash
+Status 200 OK
+Usuário Cadastrado com sucesso.
+```
+* Exemplo de Reposta de erro caso cadastrar usuario com o mesmo login:
+```bash
+Status 400 BAD REQUEST
+Usuário já existe.
+```
 
+### 8. Fazer login
+* Endpoint:/auth/login
+* Metodo HTTP : POST 
+* Descrição: login dos usuários;
+* Exemplo de Corpo da solicitação: 
+```bash
+POST/auth/login
+```
+```bash
+{
+  "login": "username",
+  "password": senha
+}
+```
+* Exemplo de Reposta de Sucesso: 
+```bash
+Status 200 OK
+"irá gerar um token para o usuario"
+```
+* Exemplo de Reposta de erro caso fazer o login errado:
+```bash
+Status 401 UNAUTHORIZED
+Usuário não cadastrado.
+```
 
 ## ✔️ Validações implementadas na API
 <details>
@@ -362,7 +432,6 @@ http://localhost:8080/api/recipes/classifications?classification=VEGAN,VEGETARIA
    2.AutenticationController<br>	
 - <b> 📁 enuns </b><br>
    1.	ClassificationEnum<br>
-   2.UserRole<br>
 - <b>📁  Exceptions </b><br>
    1.CustomExceptionHandler<br>
    2.HandleNoFoundIngredients<br>
@@ -384,19 +453,19 @@ http://localhost:8080/api/recipes/classifications?classification=VEGAN,VEGETARIA
    2.UserRepository<br>
 - <b> 📁 service </b><br>
    1.RecipesService<br> 
-   2.UserRepository<br>
+   2.AuthorizationService<br>
 - <b>📁 security </b><br>
    1.SecurityConfigurations<br>
    2.SecurityFilter<br>
    3.TokenService<br>
 
 <b>📁src -> main -> test-> java ->com.projetoSquad6.ApiReceitas</b><br>
--<b>📁  repositoryTest </b><br>
-   1.RecipesRepositoryTest<br> 
-   2.UserRepositoryTest<br>
+-<b>📁  controllerTest </b><br>
+    1.RepcipesControllerTest<br>
+   2.AutenticationControllerTest<br>
 -<b>📁  serviceTest </b><br>
    1.RecipesServiceTest<br> 
-   2.UserRepositoryTest<br>
+
 
 <b>Application</b><br>
 -   core<br>
