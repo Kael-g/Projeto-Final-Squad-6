@@ -1,4 +1,4 @@
-package com.projetoSquad6.ApiReceitas.model;
+package com.projetoSquad6.ApiReceitas.model.dto;
 
 import lombok.Data;
 

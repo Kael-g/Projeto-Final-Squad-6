@@ -1,19 +1,17 @@
 package com.projetoSquad6.ApiReceitas.controller;
 
-import com.projetoSquad6.ApiReceitas.model.LoginResponseDto;
+import com.projetoSquad6.ApiReceitas.model.dto.LoginResponseDto;
 import com.projetoSquad6.ApiReceitas.model.UserModel;
 import com.projetoSquad6.ApiReceitas.model.dto.AuthenticationDto;
 import com.projetoSquad6.ApiReceitas.repository.UserRepository;
 import com.projetoSquad6.ApiReceitas.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
