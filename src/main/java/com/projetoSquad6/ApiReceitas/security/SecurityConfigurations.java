@@ -31,8 +31,8 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
-                        .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/recipes").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/recipes").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/recipes/ingredients").permitAll()
@@ -42,7 +42,7 @@ public class SecurityConfigurations {
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling()
                  .authenticationEntryPoint(authenticationEntryPoint())
-                 .accessDeniedHandler(accessDeniedHandler());
+                .accessDeniedHandler(accessDeniedHandler());
          return httpSecurity.build();
     }
 
