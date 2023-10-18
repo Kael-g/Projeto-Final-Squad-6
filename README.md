@@ -177,6 +177,7 @@ http://localhost:8080/api/recipes/?nome=bolo de limao
 * Exemplo de Reposta de erro caso o usuario não estiver permissão:
 ```bash
 "message": "Acesso proibido. "
+```
 ### 4. Pesquisar receita por nome.
 * Endpoint:/api/recipes/
 * Metodo HTTP : GET 
