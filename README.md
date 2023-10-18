@@ -466,7 +466,9 @@ Usuário não cadastrado.
    2.AutenticationControllerTest<br>
 -<b>📁  serviceTest </b><br>
    1.RecipesServiceTest<br> 
-
+-<b>📁  mapper </b><br>
+   1.ClassificationMapperTest<br> 
+   2.RecipesnMapperTest<br>
 
 <b>Application</b><br>
 -   core<br>
