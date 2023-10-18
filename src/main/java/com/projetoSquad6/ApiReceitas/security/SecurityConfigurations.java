@@ -35,6 +35,7 @@ public class SecurityConfigurations {
                         .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/recipes").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/recipes").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/recipes/").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/recipes/ingredients").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/recipes/classifications").permitAll()
                         .antMatchers(HttpMethod.DELETE, "/api/recipes").hasRole("USER_ROLE")
