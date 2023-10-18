@@ -12,6 +12,7 @@ import com.projetoSquad6.ApiReceitas.model.dto.RecipesDto;
 import com.projetoSquad6.ApiReceitas.repository.RecipesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -119,6 +120,7 @@ public class RecipesService {
         recipesRepository.save(recipe);
         return recipesMapper.toRecipesDto(recipe);
     }
+
 
     public List<RecipesDto> findByClassification(List<String> classifications) {
         if (classifications.isEmpty()){
