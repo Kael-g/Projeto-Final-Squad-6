@@ -33,6 +33,7 @@ Os usuários podem:
 * Pesquisar por nome de receita;
 * Pesquisar por ingredientes;
 * Pesquisar por filtro de restrição alimentar.
+  
 Somente os usuários logados poderão:
 * Alterar informações das receitas;
 * Deletar uma receita pelo nome;
