@@ -40,4 +40,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
   }
 
+  @org.springframework.web.bind.annotation.ExceptionHandler(HandleWhenNoHasRecipe.class)
+  public ResponseEntity<Object> handleWhenNoHasRecipe(HandleWhenNoHasRecipe e) {
+
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("timestamp", new Date());
+    body.put("message", e.getMessage());
+
+    return new ResponseEntity<>(body, HttpStatus.OK);
+  }
+
+
 }

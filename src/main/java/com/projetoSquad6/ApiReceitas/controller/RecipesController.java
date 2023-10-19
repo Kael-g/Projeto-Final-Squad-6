@@ -55,7 +55,7 @@ public class RecipesController {
         "retornando todas as informações das receitas.", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Nenhuma receita cadastrada.", content = {
+        @ApiResponse(responseCode = "200", description = "Nenhuma receita cadastrada.", content = {
             @Content(mediaType = "application/json", schema = @Schema(example = "message: Nenhuma receita " +
                 "cadastrada."))
         })

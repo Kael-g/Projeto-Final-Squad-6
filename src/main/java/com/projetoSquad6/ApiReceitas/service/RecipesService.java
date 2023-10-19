@@ -5,6 +5,7 @@ import com.projetoSquad6.ApiReceitas.enums.ClassificationEnum;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleNoFoundIngredients;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeExistsByName;
 import com.projetoSquad6.ApiReceitas.exceptions.HandleRecipeNoExistsByName;
+import com.projetoSquad6.ApiReceitas.exceptions.HandleWhenNoHasRecipe;
 import com.projetoSquad6.ApiReceitas.mapper.RecipesMapper;
 import com.projetoSquad6.ApiReceitas.mapper.ClassificationMapper;
 import com.projetoSquad6.ApiReceitas.model.RecipesModel;
@@ -38,7 +39,7 @@ public class RecipesService {
         List<RecipesModel> recipes = recipesRepository.findAll();
 
         if (recipes.isEmpty()) {
-            throw new HandleRecipeNoExistsByName("Nenhuma receita cadastrada!");
+            throw new HandleWhenNoHasRecipe("Nenhuma receita cadastrada!");
         }
 
         List<RecipesDto> recipesDtos = new ArrayList<>();
