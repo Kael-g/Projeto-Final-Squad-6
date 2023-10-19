@@ -21,7 +21,7 @@ public class RecipesModel {
   private String name;
   @Column(name = "ingredients", nullable = false, length = 5000)
   private String ingredients;
-  @Column(name = "methodPreparation", nullable = false)
+  @Column(name = "methodPreparation", nullable = false, length = 5000)
   private String methodPreparation;
   @ElementCollection(targetClass = ClassificationEnum.class)
   @Enumerated(EnumType.STRING)
