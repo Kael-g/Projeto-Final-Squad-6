@@ -99,23 +99,18 @@ public class RecipesService {
         }
 
         RecipesModel recipe = recipesModelOptional.get();
-        if (recipesDto.getName() != null) {
-            if (recipesRepository.findByNameIgnoreCase(recipesDto.getName()).isPresent()) {
-                throw new HandleRecipeExistsByName("Já existe uma receita com esse nome");
-            }
+        if (recipesDto.getName() != null && isNameValid(recipesDto.getName())) {
             recipe.setName(recipesDto.getName());
         }
 
-        if (recipesDto.getIngredients() != null) {
+        if (recipesDto.getIngredients() != null && isIngredientsValid(recipesDto.getIngredients())) {
             recipe.setIngredients(recipesDto.getIngredients());
         }
-        if (recipesDto.getMethodPreparation() != null) {
+        if (recipesDto.getMethodPreparation() != null && isMethodPreparationValid(recipesDto.getMethodPreparation())) {
             recipe.setMethodPreparation(recipesDto.getMethodPreparation());
         }
         if (recipesDto.getClassifications() != null) {
-            recipe.setClassifications(recipesDto.getClassifications().stream()
-                    .map(classificationMapper::toEnum)
-                    .collect(Collectors.toList()));
+            recipe.setClassifications(classificationsValidation(recipesDto.getClassifications()));
         }
         recipesRepository.save(recipe);
         return recipesMapper.toRecipesDto(recipe);
