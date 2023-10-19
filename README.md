@@ -2,9 +2,7 @@
 <h1 align="center">
       <a href="#" alt="site do ecoleta"> CookBookAPI </a>
 </h1>
-<h4 align="center">
-	🏗️   Em execução  🚧
-</h4>
+
 
 Tabela de conteúdos
 =================
@@ -550,7 +548,6 @@ $ Navegue até a pasta onde os testes estão localizados (src/test/java)
 $ Selecione o arquivo de teste que você deseja executar.
 $ Clique com o botão direito no arquivo de teste e escolha a opção "Run".
 ```
-3. Infra
 ____
 
 ## 🦸 Squad 
