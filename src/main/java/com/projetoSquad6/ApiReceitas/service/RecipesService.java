@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -171,29 +169,32 @@ public class RecipesService {
         return ingredientsToLowerCase.containsAll(ingredientsIn);
     }
 
-  
+
     public List<RecipesDto> findByIngredients(List<String> ingredients) {
-        List<RecipesDto> recipes = new ArrayList<>();
-        if (ingredients.size() > 0) {
+    List<RecipesDto> recipes = new ArrayList<>();
 
-            for (String ingredient : ingredients) {
-                List<RecipesModel> ingredientsModels = recipesRepository.findByIngredients(ingredient.toLowerCase());
+ if (ingredients.isEmpty()) {
+        throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
+    }
 
-                if (!ingredientsModels.isEmpty()) {
-                    recipes.addAll(ingredientsModels.stream()
-                            .map(recipesMapper::toRecipesDto)
-                            .collect(Collectors.toList()));
-                }
+    Set<String> uniqueRecipeNames = new HashSet<>();
+
+ for (String ingredient : ingredients) {
+        List<RecipesModel> ingredientsModels = recipesRepository.findByIngredients(ingredient.toLowerCase());
+
+        for (RecipesModel recipe : ingredientsModels) {
+            if (uniqueRecipeNames.add(recipe.getName())) {
+                recipes.add(recipesMapper.toRecipesDto(recipe));
             }
-
-            if (recipes.isEmpty()) {
-                throw new HandleNoFoundIngredients("Não existe receita com esse ingrediente ");
-            }
-            return recipes;
         }
+    }
 
-            throw new HandleRecipeExistsByName("A busca está vazia, favor insira os ingredientes para busca");
-        }
+ if (recipes.isEmpty()) {
+        throw new HandleNoFoundIngredients("Não existe receita com esses ingredientes " + ingredients);
+    }
+
+ return recipes;
+}
     private boolean isNameValid(String name){
         if (recipesRepository.findByNameIgnoreCase(name).isPresent()) {
             throw new HandleRecipeExistsByName("Já existe uma receita com esse nome: " + name);
