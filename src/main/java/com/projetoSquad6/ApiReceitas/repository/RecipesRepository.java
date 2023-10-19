@@ -17,7 +17,7 @@ public interface RecipesRepository extends JpaRepository<RecipesModel, Long> {
     @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.name) = LOWER(?1)")
     Optional<RecipesModel> findByNameIgnoreCase(String name);
 
-    @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.name) IN :names")
+    @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.name) LIKE %:names%")
     List<RecipesModel> findByName(@Param("names") List<String> names);
 
     @Query("SELECT r FROM RecipesModel r WHERE LOWER(r.ingredients) LIKE %:ingredient%")
